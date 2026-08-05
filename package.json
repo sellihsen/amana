@@ -1,0 +1,18 @@
+{
+  "name": "amana",
+  "version": "1.4.0",
+  "description": "Application de gestion financière et administrative d'une mosquée",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend":  "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "migrate":      "npm run migrate --prefix backend",
+    "seed":         "npm run seed --prefix backend",
+    "build":        "npm run build --prefix frontend",
+    "test":         "npm run test --prefix backend && npm run test:run --prefix frontend",
+    "test:ci":      "npm run test:ci --prefix backend && npm run test:ci --prefix frontend && npm run build --prefix frontend"
+  },
+  "engines": {
+    "node": ">=18.14.0"
+  }
+}

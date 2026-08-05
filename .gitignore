@@ -1,0 +1,38 @@
+# Fichiers à ignorer par Git
+
+# Dépendances
+node_modules/
+.npm
+
+# Variables d'environnement (JAMAIS committer les secrets)
+.env
+.env.*
+!.env.example
+
+# Builds
+dist/
+build/
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Tests
+coverage/
+backend/tests/.baseline.json
+
+# Divers
+*.tmp
+Thumbs.db

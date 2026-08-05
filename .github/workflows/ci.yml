@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  test:
+    name: Tests (Node 18.20 / PostgreSQL 14)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      TEST_DB_NAME: amana_test
+      MAINTENANCE_DB_NAME: postgres
+      JWT_SECRET: cle-de-test-ci-suffisamment-longue-pour-la-validation
+      JWT_EXPIRES_IN: 8h
+      FRONTEND_URL: http://localhost:5173
+      SESSION_COOKIE_NAME: session
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer Node 18.20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.20.8
+
+      - name: Installer les dépendances backend
+        run: npm ci
+        working-directory: backend
+
+      - name: Installer les dépendances frontend
+        run: npm ci
+        working-directory: frontend
+
+      - name: Suite complète (backend, frontend, build)
+        run: npm run test:ci
