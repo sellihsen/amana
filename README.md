@@ -740,3 +740,71 @@ Consultation : **Administration → Journal d'audit**, ou
 entité, dates, recherche libre, pagination).
 
 Les mots de passe, hashes, jetons et cookies ne sont jamais consignés.
+
+---
+
+## Sauvegardes et restauration
+
+Les données financières et personnelles n'existent qu'en un seul exemplaire :
+l'immutabilité du grand livre protège contre la falsification, **pas contre la
+perte**. Une panne de disque ou une suppression accidentelle emporte tout.
+
+### Sauvegarde
+
+```bash
+backend/scripts/sauvegarde.sh
+```
+
+Format `custom` de `pg_dump` — compressé, restaurable table par table.
+
+Chaque sauvegarde est **vérifiée avant d'être conservée** : archive lisible,
+inventaire non vide, et présence effective des neuf tables porteuses de données
+financières. Une archive qui échoue à ces contrôles fait échouer le script
+plutôt que d'être gardée : un fichier corrompu est pire que pas de sauvegarde,
+car il donne une fausse assurance.
+
+**Rétention** : les 7 dernières quotidiennes, plus 4 hebdomadaires (le
+dimanche). Les anciennes ne sont supprimées qu'*après* validation de la
+nouvelle.
+
+**Planification** — quotidienne à 3h30 :
+
+```cron
+30 3 * * * AMANA_BACKUP_DIR=/var/backups/amana /chemin/backend/scripts/sauvegarde.sh >> /var/log/amana-sauvegarde.log 2>&1
+```
+
+### Restauration
+
+```bash
+# Test : restaure vers une base jetable, sans toucher à la production
+backend/scripts/restaurer.sh
+
+# Une archive précise
+backend/scripts/restaurer.sh /var/backups/amana/quotidien/amana-20260805-123211.dump
+
+# Restauration réelle — DESTRUCTIVE, demande confirmation explicite
+backend/scripts/restaurer.sh <archive> --vers-production
+```
+
+Le mode par défaut est le **test** : il restaure dans `amana_restauration_essai`,
+affiche les effectifs par table et recalcule le solde général. Comparer ce solde
+à celui de la production prouve que les montants sont intacts — pas seulement
+que les lignes sont présentes.
+
+En mode `--vers-production`, le script sauvegarde d'abord l'état courant avant
+de l'écraser, et exige que le nom de la base soit saisi pour confirmer.
+
+> Une sauvegarde jamais restaurée n'est pas une sauvegarde, c'est un fichier.
+> Testez la restauration périodiquement — la commande sans argument ne présente
+> aucun risque.
+
+**Vérifié** : après restauration, les déclencheurs `append-only` du grand livre
+et du journal d'audit sont toujours actifs — un `UPDATE` sur une écriture ou un
+`DELETE` sur l'audit reste refusé.
+
+### Ce qui n'est pas couvert
+
+Les sauvegardes résident **sur la même machine** que la base. Elles protègent
+d'une erreur de manipulation ou d'une migration ratée, pas de la perte de la
+VM. Pour une vraie continuité, copier `/var/backups/amana` vers un stockage
+distant (Azure Blob, `rsync` vers une autre machine) reste à faire.
