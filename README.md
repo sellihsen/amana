@@ -159,9 +159,9 @@ npm run install:all
 ### 3. Créer la base de données
 
 ```bash
-psql -U postgres -c "CREATE DATABASE mosquee_db;"
+psql -U postgres -c "CREATE DATABASE amana_db;"
 # ou avec Postgres.app sur macOS :
-psql -h localhost -U $(whoami) -c "CREATE DATABASE mosquee_db;"
+psql -h localhost -U $(whoami) -c "CREATE DATABASE amana_db;"
 ```
 
 ### 4. Configurer les variables d'environnement
@@ -178,7 +178,7 @@ valeur par défaut.
 ```env
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=mosquee_db
+DB_NAME=amana_db
 DB_USER=votre_utilisateur_postgres
 DB_PASSWORD=votre_mot_de_passe
 FRONTEND_URL=http://localhost:5173
@@ -618,7 +618,7 @@ FRONTEND_URL=http://localhost:5173
 # PostgreSQL
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=mosquee_db
+DB_NAME=amana_db
 DB_USER=votre_utilisateur
 DB_PASSWORD=votre_mot_de_passe
 
