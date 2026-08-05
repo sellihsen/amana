@@ -1,7 +1,5 @@
+import { useState } from 'react'
 import { FileSpreadsheet, FileText } from 'lucide-react'
-import * as XLSX from 'xlsx'
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
 
 import { projeter } from '../utils/export'
 
@@ -11,9 +9,14 @@ import { projeter } from '../utils/export'
  * Les deux formats consomment la MÊME projection : ce qui est exporté est
  * exactement la collection filtrée affichée à l'écran, avec le même format de
  * montant et de date.
+ *
+ * `xlsx` et `jspdf` pèsent à eux deux près de 800 Ko. Ils ne sont donc pas
+ * importés au chargement de la page mais au moment du clic : la très grande
+ * majorité des visites n'exporte rien, et n'a aucune raison de les télécharger.
  */
 
-function exporterExcel({ data, columns, filename }) {
+async function exporterExcel({ data, columns, filename }) {
+  const XLSX = await import('xlsx')
   const { entetes, corpsTableur } = projeter(data, columns)
 
   const wb = XLSX.utils.book_new()
@@ -38,12 +41,15 @@ function exporterExcel({ data, columns, filename }) {
   ws['!cols'] = columns.map((c) => ({ wch: c.width || 20 }))
   XLSX.utils.book_append_sheet(wb, ws, 'Données')
 
-  // `bookSST` conserve les chaînes Unicode telles quelles (accents, tirets
-  // cadratins, symbole €).
   XLSX.writeFile(wb, `${filename || 'export'}.xlsx`, { bookSST: false, type: 'binary' })
 }
 
-function exporterPDF({ data, columns, filename, title }) {
+async function exporterPDF({ data, columns, filename, title }) {
+  const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+    import('jspdf'),
+    import('jspdf-autotable'),
+  ])
+
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
   const { entetes, corps } = projeter(data, columns)
 
@@ -76,26 +82,51 @@ function exporterPDF({ data, columns, filename, title }) {
 }
 
 export default function ExportButtons({ data, columns, filename, title }) {
+  const [enCours, setEnCours] = useState(null)
+  const [erreur, setErreur] = useState('')
+
   if (!data || data.length === 0) return null
+
+  const lancer = async (format, fonction) => {
+    setEnCours(format)
+    setErreur('')
+    try {
+      await fonction({ data, columns, filename, title })
+    } catch (_) {
+      // Le chargement du module peut échouer (réseau coupé en pleine session).
+      setErreur("L'export n'a pas pu être généré. Réessayez.")
+    } finally {
+      setEnCours(null)
+    }
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-2">
       <button
         type="button"
-        onClick={() => exporterExcel({ data, columns, filename, title })}
-        className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+        disabled={enCours !== null}
+        onClick={() => lancer('excel', exporterExcel)}
+        className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-60"
       >
         <FileSpreadsheet className="w-4 h-4 flex-shrink-0" />
-        <span className="hidden sm:inline">Exporter en </span>Excel
+        <span className="hidden sm:inline">Exporter en </span>
+        {enCours === 'excel' ? '…' : 'Excel'}
       </button>
       <button
         type="button"
-        onClick={() => exporterPDF({ data, columns, filename, title })}
-        className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
+        disabled={enCours !== null}
+        onClick={() => lancer('pdf', exporterPDF)}
+        className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-60"
       >
         <FileText className="w-4 h-4 flex-shrink-0" />
-        <span className="hidden sm:inline">Exporter en </span>PDF
+        <span className="hidden sm:inline">Exporter en </span>
+        {enCours === 'pdf' ? '…' : 'PDF'}
       </button>
+      {erreur && (
+        <span role="alert" className="text-sm text-red-600">
+          {erreur}
+        </span>
+      )}
     </div>
   )
 }

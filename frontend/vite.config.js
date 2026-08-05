@@ -12,6 +12,22 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Les dépendances stables sont isolées : elles changent rarement, et
+        // restent donc en cache du navigateur entre deux déploiements, alors
+        // que le code applicatif est réémis à chaque fois.
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router-dom'],
+          graphiques: ['recharts'],
+        },
+      },
+    },
+    // Le seuil d'avertissement vise le morceau applicatif, désormais découpé.
+    chunkSizeWarningLimit: 600,
+  },
+
   test: {
     environment: 'jsdom',
     globals: true,

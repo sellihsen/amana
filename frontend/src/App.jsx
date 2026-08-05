@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { useAuthStore, ETATS } from './store/authStore'
@@ -6,17 +6,37 @@ import { CAPACITES, possede } from './utils/permissions'
 import api from './services/api'
 import Layout from './components/layout/Layout'
 import LoginPage from './pages/LoginPage'
-import DashboardPage from './pages/DashboardPage'
-import MembresPage from './pages/MembresPage'
-import DonsPage from './pages/DonsPage'
-import CotisationsPage from './pages/CotisationsPage'
-import DepensesPage from './pages/DepensesPage'
-import AdminPage from './pages/AdminPage'
-import RHPage from './pages/RHPage'
-import MadrasaPage from './pages/MadrasaPage'
-import BilansPage from './pages/BilansPage'
-import StockPage from './pages/StockPage'
-import SocialPage from './pages/SocialPage'
+
+/**
+ * Les pages sont chargées à la demande.
+ *
+ * Sans cela, ouvrir l'écran de connexion téléchargeait aussi les graphiques du
+ * tableau de bord et l'intégralité des écrans d'administration — plusieurs
+ * centaines de kilooctets qu'un utilisateur ne verra peut-être jamais, sur une
+ * connexion mobile.
+ *
+ * `LoginPage` reste importée normalement : c'est la première chose que voit un
+ * visiteur non connecté, la différer ne ferait qu'ajouter une attente.
+ */
+const DashboardPage = lazy(() => import('./pages/DashboardPage'))
+const MembresPage = lazy(() => import('./pages/MembresPage'))
+const DonsPage = lazy(() => import('./pages/DonsPage'))
+const CotisationsPage = lazy(() => import('./pages/CotisationsPage'))
+const DepensesPage = lazy(() => import('./pages/DepensesPage'))
+const RHPage = lazy(() => import('./pages/RHPage'))
+const MadrasaPage = lazy(() => import('./pages/MadrasaPage'))
+const BilansPage = lazy(() => import('./pages/BilansPage'))
+const StockPage = lazy(() => import('./pages/StockPage'))
+const SocialPage = lazy(() => import('./pages/SocialPage'))
+const AdminPage = lazy(() => import('./pages/AdminPage'))
+
+function Chargement() {
+  return (
+    <div className="flex items-center justify-center py-20 text-gray-400 text-sm">
+      Chargement…
+    </div>
+  )
+}
 
 /**
  * Rétablit l'état de session au chargement.
@@ -101,21 +121,21 @@ export default function App() {
         }
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="membres" element={<MembresPage />} />
-        <Route path="dons" element={<DonsPage />} />
-        <Route path="cotisations" element={<CotisationsPage />} />
-        <Route path="depenses" element={<DepensesPage />} />
-        <Route path="rh" element={<RHPage />} />
-        <Route path="madrasa" element={<MadrasaPage />} />
-        <Route path="bilans" element={<BilansPage />} />
-        <Route path="stock" element={<StockPage />} />
-        <Route path="social" element={<SocialPage />} />
+        <Route path="dashboard" element={<Suspense fallback={<Chargement />}><DashboardPage /></Suspense>} />
+        <Route path="membres" element={<Suspense fallback={<Chargement />}><MembresPage /></Suspense>} />
+        <Route path="dons" element={<Suspense fallback={<Chargement />}><DonsPage /></Suspense>} />
+        <Route path="cotisations" element={<Suspense fallback={<Chargement />}><CotisationsPage /></Suspense>} />
+        <Route path="depenses" element={<Suspense fallback={<Chargement />}><DepensesPage /></Suspense>} />
+        <Route path="rh" element={<Suspense fallback={<Chargement />}><RHPage /></Suspense>} />
+        <Route path="madrasa" element={<Suspense fallback={<Chargement />}><MadrasaPage /></Suspense>} />
+        <Route path="bilans" element={<Suspense fallback={<Chargement />}><BilansPage /></Suspense>} />
+        <Route path="stock" element={<Suspense fallback={<Chargement />}><StockPage /></Suspense>} />
+        <Route path="social" element={<Suspense fallback={<Chargement />}><SocialPage /></Suspense>} />
         <Route
           path="admin"
           element={
             <RoutePrivee capacite={CAPACITES.ADMIN}>
-              <AdminPage />
+              <Suspense fallback={<Chargement />}><AdminPage /></Suspense>
             </RoutePrivee>
           }
         />
