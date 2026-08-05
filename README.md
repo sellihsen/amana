@@ -743,6 +743,20 @@ Les mots de passe, hashes, jetons et cookies ne sont jamais consignés.
 
 ---
 
+## Déploiement
+
+Pour installer Amana sur un serveur — reverse proxy, TLS, service, pare-feu et
+sauvegardes — voir **[deploy/README.md](deploy/README.md)**.
+
+```bash
+./deploy/installer.sh amana.mondomaine.fr
+```
+
+Les modèles de `deploy/` ne contiennent aucun secret ni valeur propre à une
+installation : ils sont destinés à être repris tels quels.
+
+---
+
 ## Sauvegardes et restauration
 
 Les données financières et personnelles n'existent qu'en un seul exemplaire :

@@ -1,0 +1,32 @@
+# ═══════════════════════════════════════════════════════════════════════════
+#  Dépendances de démarrage de PM2
+#
+#  À n'utiliser QUE si l'application vit sur un disque distinct du système.
+#  Sans cela, systemd peut lancer « pm2 resurrect » avant que le disque soit
+#  monté ou que PostgreSQL accepte les connexions : PM2 démarre alors sans
+#  trouver l'application, et le site ne remonte pas après un redémarrage —
+#  silencieusement.
+#
+#  Installation :
+#    sudo mkdir -p /etc/systemd/system/pm2-UTILISATEUR.service.d
+#    sudo cp pm2-override.conf /etc/systemd/system/pm2-UTILISATEUR.service.d/override.conf
+#    sudo systemctl daemon-reload
+#
+#  Remplacer AMANA_POINT_DE_MONTAGE par le point de montage réel, obtenu par :
+#    df -h /chemin/vers/amana | tail -1 | awk '{print $6}'
+#
+#  Vérifier également que ce montage figure dans /etc/fstab avec l'option
+#  « nofail », sans quoi un disque absent empêcherait la machine de démarrer :
+#    UUID=…  /point/de/montage  ext4  defaults,nofail,x-systemd.device-timeout=10  0  2
+# ═══════════════════════════════════════════════════════════════════════════
+
+[Unit]
+RequiresMountsFor=AMANA_POINT_DE_MONTAGE
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+# Laisse au disque et à la base le temps d'être réellement prêts.
+ExecStartPre=/bin/sleep 5
+Restart=on-failure
+RestartSec=10

@@ -1,0 +1,26 @@
+# ═══════════════════════════════════════════════════════════════════════════
+#  Sauvegarde quotidienne d'Amana
+#
+#  Installation, dans la crontab de l'utilisateur qui fait tourner
+#  l'application (PAS root : le script lit backend/.env) :
+#
+#    crontab -e
+#
+#  Remplacer AMANA_RACINE par le chemin absolu du dépôt.
+#
+#  Préparer au préalable la destination et le journal :
+#    sudo mkdir -p /var/backups/amana && sudo chown "$USER":"$USER" /var/backups/amana
+#    sudo touch /var/log/amana-sauvegarde.log && sudo chown "$USER":"$USER" /var/log/amana-sauvegarde.log
+#
+#  Le script vérifie chaque archive avant de la conserver et supprime les
+#  anciennes seulement après validation de la nouvelle. Il échoue bruyamment :
+#  surveiller le journal, ou brancher une alerte dessus.
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Sauvegarde quotidienne — 3h30
+30 3 * * * AMANA_BACKUP_DIR=/var/backups/amana AMANA_RACINE/backend/scripts/sauvegarde.sh >> /var/log/amana-sauvegarde.log 2>&1
+
+# Test de restauration hebdomadaire — lundi 4h00.
+# Restaure vers une base jetable et journalise les effectifs : une sauvegarde
+# jamais restaurée n'est pas une sauvegarde, c'est un fichier.
+0 4 * * 1 AMANA_BACKUP_DIR=/var/backups/amana AMANA_RACINE/backend/scripts/restaurer.sh >> /var/log/amana-sauvegarde.log 2>&1
