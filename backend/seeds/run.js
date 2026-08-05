@@ -11,6 +11,7 @@ const bcrypt = require('bcryptjs');
 
 const {
   assertSchemaMigrated,
+  rattacherAuGrandLivre,
   assertSeedAutorise,
   motDePasseAdminSeed,
   emailAdminSeed,
@@ -108,7 +109,7 @@ const seed = async () => {
           `INSERT INTO cotisations_madrasa
              (eleve_id, montant, mois_concerne, date_paiement, methode_paiement, statut_paiement)
            VALUES ($1, 50.00, $2, CURRENT_DATE, 'Espèces', $3)
-           ON CONFLICT (eleve_id, mois_concerne) DO NOTHING`,
+           ON CONFLICT (eleve_id, periode) DO NOTHING`,
           [eleve.id, mois, paye ? 'payé' : 'en attente']
         );
       }
@@ -174,6 +175,12 @@ const seed = async () => {
   } else {
     console.log('   ⏭  Produits déjà présents.');
   }
+
+  // Les lignes ci-dessus ont été écrites directement en base : sans cette
+  // étape, elles n'apparaîtraient dans aucun total (tous calculés depuis le
+  // grand livre) et le tableau de bord afficherait zéro.
+  const nbEcritures = await rattacherAuGrandLivre(pool);
+  console.log(`   ✅ Grand livre : ${nbEcritures} écriture(s) rattachée(s)`);
 
   console.log('\n✅ Données de test insérées avec succès.');
 };

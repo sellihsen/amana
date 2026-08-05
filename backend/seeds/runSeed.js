@@ -17,6 +17,7 @@ const bcrypt = require('bcryptjs');
 
 const {
   assertSchemaMigrated,
+  rattacherAuGrandLivre,
   assertSeedAutorise,
   motDePasseAdminSeed,
   emailAdminSeed,
@@ -146,7 +147,7 @@ const TABLES_A_VIDER = [
           `INSERT INTO cotisations_madrasa
              (eleve_id, montant, mois_concerne, date_paiement, methode_paiement, statut_paiement)
            VALUES ($1, 50.00, $2, CURRENT_DATE, 'Espèces', $3)
-           ON CONFLICT (eleve_id, mois_concerne) DO NOTHING`,
+           ON CONFLICT (eleve_id, periode) DO NOTHING`,
           [eleve.id, mois, paye ? 'payé' : 'en attente']
         );
         nbCotisations += 1;
@@ -226,6 +227,11 @@ const TABLES_A_VIDER = [
       );
       log('Don Social (1) et distribution (1)');
     }
+
+    // Sans ce rattachement, aucune des lignes insérées n'apparaîtrait dans les
+    // totaux : ils sont tous calculés depuis le grand livre.
+    const nbEcritures = await rattacherAuGrandLivre(pool);
+    log(`Grand livre : ${nbEcritures} écriture(s) rattachée(s)`);
 
     console.log('\n✅ Seed terminé avec succès.');
     console.log(`   🔑 Connexion : ${email}`);

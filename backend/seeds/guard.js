@@ -79,8 +79,36 @@ function emailAdminSeed() {
   return process.env.SEED_ADMIN_EMAIL || 'admin@mosquee.local';
 }
 
+/**
+ * Rattache au grand livre les lignes métier insérées directement par un seed.
+ *
+ * Les seeds écrivent en base sans passer par les routes : leurs lignes n'ont
+ * donc pas d'écriture comptable, et tous les totaux — calculés depuis le grand
+ * livre — resteraient à zéro.
+ *
+ * La reprise d'historique de la migration 015 fait exactement ce travail et
+ * elle est idempotente (vérifié par tests/integration/migrations.test.js).
+ * On la rejoue plutôt que de dupliquer son SQL : une seule définition de
+ * « comment une source devient une écriture ».
+ */
+async function rattacherAuGrandLivre(pool) {
+  const fs = require('fs');
+  const path = require('path');
+  const sql = fs.readFileSync(
+    path.join(__dirname, '..', 'migrations', '015_financial_ledger.sql'),
+    'utf8'
+  );
+  await pool.query(sql);
+
+  const { rows } = await pool.query(
+    'SELECT COUNT(*)::int AS n FROM ecritures_financieres'
+  );
+  return rows[0].n;
+}
+
 module.exports = {
   assertSchemaMigrated,
+  rattacherAuGrandLivre,
   assertSeedAutorise,
   motDePasseAdminSeed,
   emailAdminSeed,
