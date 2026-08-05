@@ -250,7 +250,7 @@ export default function BilansPage() {
             />
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm min-w-[640px]">
               <thead>
                 <tr className="border-b border-gray-100">
                   <th className="text-left pb-2 font-medium text-gray-500">Libellé</th>
@@ -288,7 +288,7 @@ export default function BilansPage() {
             />
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm min-w-[640px]">
               <thead>
                 <tr className="border-b border-gray-100">
                   <th className="text-left pb-2 font-medium text-gray-500">Libellé</th>
@@ -314,7 +314,7 @@ export default function BilansPage() {
 
       {/* Export complet du bilan */}
       <div className="card">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold text-gray-800">Bilan complet {year}</h2>
             <p className="text-sm text-gray-500 mt-1">Télécharger l'intégralité du bilan financier</p>

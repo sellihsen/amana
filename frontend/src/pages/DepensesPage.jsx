@@ -87,8 +87,8 @@ export default function DepensesPage() {
         </div>
       </div>
 
-      <div className="card p-0 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="card p-0 overflow-x-auto">
+        <table className="w-full text-sm min-w-[640px]">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
               {['Libellé', 'Catégorie', 'Montant', 'Date', 'N° Facture', 'Commentaire', 'Enregistré par', ''].map(h => (

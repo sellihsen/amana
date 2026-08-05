@@ -59,8 +59,8 @@ export default function MembresPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Membres</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Membres</h1>
         <button onClick={openCreate} className="btn-primary flex items-center gap-2">
           <Plus className="w-4 h-4" /> Nouveau membre
         </button>
@@ -95,8 +95,8 @@ export default function MembresPage() {
       </div>
 
       {/* Tableau */}
-      <div className="card p-0 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="card p-0 overflow-x-auto">
+        <table className="w-full text-sm min-w-[640px]">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
               {['Nom', 'Email', 'Téléphone', 'Statut', 'Adhésion', 'Actions'].map(h => (

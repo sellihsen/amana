@@ -112,8 +112,8 @@ function RegistreFamilles() {
       )}
 
       {/* Tableau */}
-      <div className="card p-0 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="card p-0 overflow-x-auto">
+        <table className="w-full text-sm min-w-[640px]">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
               <th className="text-left px-4 py-3 font-medium text-gray-600">Responsable</th>
@@ -382,8 +382,8 @@ function FicheFamille({ famille, onClose }) {
         {data.historique?.length === 0 ? (
           <p className="text-sm text-gray-400">Aucune distribution enregistrée.</p>
         ) : (
-          <div className="overflow-hidden rounded-xl border border-gray-100">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto rounded-xl border border-gray-100">
+            <table className="w-full text-sm min-w-[640px]">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="text-left px-3 py-2 font-medium text-gray-600">Date</th>
@@ -478,11 +478,11 @@ function BilanDistribution({ peutEnregistrerVersement }) {
       <BilanSocial bilan={bilan} />
 
       {/* Tableau d'équilibre */}
-      <div className="card p-0 overflow-hidden">
+      <div className="card p-0 overflow-x-auto">
         <div className="px-4 py-3 border-b border-gray-100">
           <h2 className="font-semibold text-gray-800">Bilan des caisses sociales</h2>
         </div>
-        <table className="w-full text-sm">
+        <table className="w-full text-sm min-w-[640px]">
           <thead className="bg-gray-50">
             <tr>
               <th className="text-left px-4 py-3 font-medium text-gray-600">Caisse</th>

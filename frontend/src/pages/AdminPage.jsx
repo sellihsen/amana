@@ -231,8 +231,8 @@ function ConfigSection({ title, description, type, apiPath, showToggle, displayL
       {loading ? (
         <div className="text-center py-8 text-gray-400">Chargement...</div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-gray-100">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-xl border border-gray-100">
+          <table className="w-full text-sm min-w-[640px]">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
                 <th className="text-left px-4 py-3 font-medium text-gray-600">Nom</th>
@@ -471,8 +471,8 @@ function UsersSection() {
         </div>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-gray-100">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto rounded-xl border border-gray-100">
+        <table className="w-full text-sm min-w-[640px]">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
               <th className="text-left px-4 py-3 font-medium text-gray-600">Nom</th>

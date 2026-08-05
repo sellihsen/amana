@@ -79,22 +79,22 @@ export default function ExportButtons({ data, columns, filename, title }) {
   if (!data || data.length === 0) return null
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <button
         type="button"
         onClick={() => exporterExcel({ data, columns, filename, title })}
         className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
       >
-        <FileSpreadsheet className="w-4 h-4" />
-        Exporter en Excel
+        <FileSpreadsheet className="w-4 h-4 flex-shrink-0" />
+        <span className="hidden sm:inline">Exporter en </span>Excel
       </button>
       <button
         type="button"
         onClick={() => exporterPDF({ data, columns, filename, title })}
         className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
       >
-        <FileText className="w-4 h-4" />
-        Exporter en PDF
+        <FileText className="w-4 h-4 flex-shrink-0" />
+        <span className="hidden sm:inline">Exporter en </span>PDF
       </button>
     </div>
   )

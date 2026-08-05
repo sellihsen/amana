@@ -518,8 +518,8 @@ export default function MadrasaPage() {
                 </div>
               </div>
 
-              <div className="card p-0 overflow-hidden">
-                <table className="w-full text-sm">
+              <div className="card p-0 overflow-x-auto">
+                <table className="w-full text-sm min-w-[640px]">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
                       {['Élève', 'Classe', 'Parent / Contact', 'Inscription', 'Payé total', 'En attente', 'Statut', 'Actions']
@@ -622,8 +622,8 @@ export default function MadrasaPage() {
                 </div>
               )}
 
-              <div className="card p-0 overflow-hidden">
-                <table className="w-full text-sm">
+              <div className="card p-0 overflow-x-auto">
+                <table className="w-full text-sm min-w-[640px]">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
                       {['Élève', 'Classe', 'Mois', 'Montant', 'Méthode', 'Date', 'Statut', 'Actions']

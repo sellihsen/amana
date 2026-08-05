@@ -227,7 +227,7 @@ export default function DashboardPage() {
           <p className="text-gray-400 text-sm">Aucune opération enregistrée.</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm min-w-[640px]">
               <thead className="text-left text-gray-500">
                 <tr>
                   <th className="py-2 font-medium">Date</th>

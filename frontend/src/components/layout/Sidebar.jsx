@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard, Users, Heart, BadgeDollarSign,
   TrendingDown, Settings, UserCog, BookOpen,
-  FileSpreadsheet, Package, HandHeart,
+  FileSpreadsheet, Package, HandHeart, X,
 } from 'lucide-react'
 import RoleGuard from '../RoleGuard'
 import { CAPACITES } from '../../utils/permissions'
@@ -21,13 +21,42 @@ const navItems = [
   { to: '/bilans',      icon: FileSpreadsheet, label: 'Comptabilité & Bilans' },
 ]
 
-export default function Sidebar() {
+/**
+ * Navigation principale.
+ *
+ * Colonne fixe à partir de `lg`. En dessous, tiroir hors écran que `ouvert`
+ * fait glisser : la transformation évite de démonter puis remonter le menu à
+ * chaque ouverture, et conserve l'état de défilement.
+ */
+export default function Sidebar({ ouvert = false, surFermeture }) {
   return (
-    <aside className="w-64 bg-amana-800 text-white flex flex-col">
-      {/* Logo & association */}
-      <div className="flex flex-col items-center justify-center text-center px-4 py-6 border-b border-amana-700">
-        <img src={logoSrc} alt="Logo" className="w-24 h-24 rounded-full object-cover ring-2 ring-amana-500 mb-3" />
-        <p className="font-bold text-xl leading-tight text-white">ACMCM</p>
+    <aside
+      className={`
+        fixed inset-y-0 left-0 z-40 w-64 bg-amana-800 text-white flex flex-col
+        transform transition-transform duration-200 ease-in-out
+        ${ouvert ? 'translate-x-0' : '-translate-x-full'}
+        lg:static lg:translate-x-0 lg:z-auto
+      `}
+      aria-label="Navigation principale"
+    >
+      {/* Fermeture, visible uniquement en mode tiroir. */}
+      <button
+        type="button"
+        onClick={surFermeture}
+        className="lg:hidden absolute top-3 right-3 p-2 text-amana-200 hover:text-white"
+        aria-label="Fermer le menu"
+      >
+        <X className="w-5 h-5" />
+      </button>
+
+      {/* Logo & association — compact sur mobile pour laisser voir les liens. */}
+      <div className="flex flex-col items-center justify-center text-center px-4 py-4 lg:py-6 border-b border-amana-700">
+        <img
+          src={logoSrc}
+          alt="Logo"
+          className="w-16 h-16 lg:w-24 lg:h-24 rounded-full object-cover ring-2 ring-amana-500 mb-2 lg:mb-3"
+        />
+        <p className="font-bold text-lg lg:text-xl leading-tight text-white">ACMCM</p>
         <p className="text-sm font-semibold text-emerald-400 leading-tight mt-1">Mosquée Bilal</p>
       </div>
 

@@ -77,8 +77,8 @@ export default function CotisationsPage() {
         </div>
       </div>
 
-      <div className="card p-0 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="card p-0 overflow-x-auto">
+        <table className="w-full text-sm min-w-[640px]">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
               {['Membre', 'Montant', 'Année', 'Mois', 'Date paiement', 'Statut'].map(h => (

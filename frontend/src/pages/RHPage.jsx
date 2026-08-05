@@ -497,8 +497,8 @@ export default function RHPage() {
                 </button>
               </div>
 
-              <div className="card p-0 overflow-hidden">
-                <table className="w-full text-sm">
+              <div className="card p-0 overflow-x-auto">
+                <table className="w-full text-sm min-w-[640px]">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
                       {['Employé', 'Rôle', 'Salaire de base', 'Embauche', 'Versé total', 'Statut', 'Actions']
@@ -596,8 +596,8 @@ export default function RHPage() {
                 </div>
               )}
 
-              <div className="card p-0 overflow-hidden">
-                <table className="w-full text-sm">
+              <div className="card p-0 overflow-x-auto">
+                <table className="w-full text-sm min-w-[640px]">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
                       {['Employé', 'Type', 'Montant', 'Mois concerné', 'Date versement', 'Commentaire', 'Saisi par', '']
