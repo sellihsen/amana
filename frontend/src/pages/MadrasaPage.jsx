@@ -265,6 +265,16 @@ export default function MadrasaPage() {
   const [elevesActifs, setElevesActifs] = useState([])
   const [cotisations,  setCotisations]  = useState([])
   const [classesOptions, setClassesOptions] = useState([])
+  // Idem : totaux et ventilations viennent du serveur, jamais d'un calcul local.
+  const [syntheseMadrasa, setSyntheseMadrasa] = useState({
+    totaux: {
+      montant: '0.00',
+      nombre: 0,
+      nombre_en_attente: 0,
+      montant_en_attente: '0.00',
+    },
+    par_methode: [],
+  })
   const [loading,      setLoading]      = useState(true)
   const [modalEleve,   setModalEleve]   = useState(null)
   const [modalPaiement,setModalPaiement]= useState(false)

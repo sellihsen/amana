@@ -291,6 +291,14 @@ export default function RHPage() {
   const [actifs,      setActifs]      = useState([])
   const [paiements,   setPaiements]   = useState([])
   const [typesPaiement, setTypesPaiement] = useState([])
+  // Totaux et ventilations calculés par PostgreSQL. Valeurs neutres avant le
+  // premier chargement : le rendu ne doit jamais dépendre d'un appel en cours.
+  const [syntheseRh, setSyntheseRh] = useState({
+    totaux: { montant: '0.00', nombre: 0 },
+    par_type: [],
+    masse_salariale: '0.00',
+    effectif_actif: 0,
+  })
   const [loading,     setLoading]     = useState(true)
   const [modalFiche,    setModalFiche]    = useState(null)
   const [modalPaiement, setModalPaiement] = useState(false)
