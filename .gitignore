@@ -29,6 +29,10 @@ npm-debug.log*
 *.swp
 *.swo
 
+# Skills installées (contenu vendorisé, restituable depuis skills-lock.json)
+.agents/
+.claude/
+
 # Tests
 coverage/
 backend/tests/.baseline.json
