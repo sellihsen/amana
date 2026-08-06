@@ -116,12 +116,51 @@ montants, en-têtes d'idempotence, codes d'erreur et routes réellement exposée
 `/api-docs` exige une session administrateur et reste désactivé en production
 sauf activation explicite.
 
+---
+
+## Page publique
+
+La racine `/` sert une page de présentation. L'application reste derrière la
+session, **aux mêmes adresses qu'auparavant** (`/dashboard`, `/membres`, …) :
+elle est montée sur une route de mise en page sans chemin, qui n'ajoute rien à
+l'URL. Un visiteur non connecté n'atteint que deux écrans, cette page et
+`/login`.
+
+Elle est composée comme un registre — ce que le nom du logiciel raconte déjà.
+Les intitulés de section reprennent les comptes du plan comptable associatif
+(`754` dons, `756` cotisations, `641` personnel, `12` résultat) : ce sont les
+numéros qu'un trésorier lit toutes les semaines, pas une numérotation
+décorative. L'élément d'ouverture est un journal de trésorerie qui se solde sur
+un **écart de rapprochement nul**.
+
+| Rôle | Choix |
+|------|-------|
+| Titrage | Amiri — le caractère de la composition arabe, qui pose aussi أمانة |
+| Texte courant | IBM Plex Sans |
+| Chiffres et codes | IBM Plex Mono, chiffres tabulaires |
+| Encre | `#0E2119` — vert-noir des bandeaux |
+| Papier | `#E9EEE7` — vert-gris de registre |
+| Filets | `#A8321E` carmin pour la colonne des sorties, `#CFD9CB` ailleurs |
+
+Ses styles vivent dans `src/pages/landing/landing.css`, **tous préfixés `.lp`**
+et écrits hors de Tailwind : l'application connectée possède déjà ses propres
+`.card`, `.btn-primary` et `.input-field` dans `src/index.css`, et les deux
+jeux de règles ne doivent pas se marcher dessus. La remise à zéro des marges y
+passe par `:where()`, sans quoi `.lp p { margin: 0 }` l'emporterait sur chaque
+règle de classe.
+
+L'animation est réservée au journal d'ouverture et respecte
+`prefers-reduced-motion`. Le formulaire d'inscription à la lettre **confirme
+localement : aucun service d'envoi n'est branché derrière.**
+
+---
 
 ## Stack technique
 
 | Couche          | Technologie                                        |
 |-----------------|----------------------------------------------------|
 | Frontend        | React 18, Vite, Tailwind CSS, Lucide React         |
+| Page publique   | CSS préfixé `.lp` ; Amiri, IBM Plex Sans / Mono    |
 | Graphiques      | Recharts                                           |
 | État global     | Zustand (en mémoire, aucune persistance navigateur)|
 | Client HTTP     | Axios (cookie de session, `withCredentials`)       |
@@ -264,6 +303,9 @@ npm run dev:backend
 ```bash
 npm run dev:frontend
 # Interface sur http://localhost:5173
+#   /        page publique de présentation
+#   /login   connexion
+#   le reste exige une session
 ```
 
 ---
@@ -488,7 +530,7 @@ amana/
     +-- tailwind.config.js
     \-- src/
         +-- main.jsx
-        +-- App.jsx                 # Routeur React Router v6
+        +-- App.jsx                 # Routeur React Router v6 : / publique, le reste sous session
         +-- components/
         |   +-- RoleGuard.jsx           # Garde de présentation + hook useCapacite
         |   +-- BoutonContreEcriture.jsx# Contre-écriture motivée
@@ -504,6 +546,9 @@ amana/
         |       +-- Sidebar.jsx     # Navigation : TdB, Membres, Dons, Cotisations, Dépenses, RH, Stocks, Madrasa, Social, Bilans, Admin
         |       \-- Header.jsx
         +-- pages/
+        |   +-- landing/
+        |   |   +-- LandingPage.jsx # Page publique servie sur /
+        |   |   \-- landing.css     # Styles préfixés .lp, hors Tailwind
         |   +-- LoginPage.jsx
         |   +-- DashboardPage.jsx
         |   +-- MembresPage.jsx

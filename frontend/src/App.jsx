@@ -6,6 +6,7 @@ import { CAPACITES, possede } from './utils/permissions'
 import api from './services/api'
 import Layout from './components/layout/Layout'
 import LoginPage from './pages/LoginPage'
+import LandingPage from './pages/landing/LandingPage'
 
 /**
  * Les pages sont chargées à la demande.
@@ -15,8 +16,9 @@ import LoginPage from './pages/LoginPage'
  * centaines de kilooctets qu'un utilisateur ne verra peut-être jamais, sur une
  * connexion mobile.
  *
- * `LoginPage` reste importée normalement : c'est la première chose que voit un
- * visiteur non connecté, la différer ne ferait qu'ajouter une attente.
+ * `LandingPage` et `LoginPage` restent importées normalement : ce sont les deux
+ * premières choses que voit un visiteur non connecté, les différer ne ferait
+ * qu'ajouter une attente.
  */
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const MembresPage = lazy(() => import('./pages/MembresPage'))
@@ -112,27 +114,32 @@ export default function App() {
           )
         }
       />
+      {/* La racine est publique : c'est la page de présentation d'Amana. */}
+      <Route path="/" element={<LandingPage />} />
+      {/*
+        Route de mise en page sans chemin : elle n'ajoute rien à l'URL, si bien
+        que `/dashboard`, `/membres`… restent exactement où ils étaient avant
+        que la racine ne soit rendue au public.
+      */}
       <Route
-        path="/"
         element={
           <RoutePrivee>
             <Layout />
           </RoutePrivee>
         }
       >
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<Suspense fallback={<Chargement />}><DashboardPage /></Suspense>} />
-        <Route path="membres" element={<Suspense fallback={<Chargement />}><MembresPage /></Suspense>} />
-        <Route path="dons" element={<Suspense fallback={<Chargement />}><DonsPage /></Suspense>} />
-        <Route path="cotisations" element={<Suspense fallback={<Chargement />}><CotisationsPage /></Suspense>} />
-        <Route path="depenses" element={<Suspense fallback={<Chargement />}><DepensesPage /></Suspense>} />
-        <Route path="rh" element={<Suspense fallback={<Chargement />}><RHPage /></Suspense>} />
-        <Route path="madrasa" element={<Suspense fallback={<Chargement />}><MadrasaPage /></Suspense>} />
-        <Route path="bilans" element={<Suspense fallback={<Chargement />}><BilansPage /></Suspense>} />
-        <Route path="stock" element={<Suspense fallback={<Chargement />}><StockPage /></Suspense>} />
-        <Route path="social" element={<Suspense fallback={<Chargement />}><SocialPage /></Suspense>} />
+        <Route path="/dashboard" element={<Suspense fallback={<Chargement />}><DashboardPage /></Suspense>} />
+        <Route path="/membres" element={<Suspense fallback={<Chargement />}><MembresPage /></Suspense>} />
+        <Route path="/dons" element={<Suspense fallback={<Chargement />}><DonsPage /></Suspense>} />
+        <Route path="/cotisations" element={<Suspense fallback={<Chargement />}><CotisationsPage /></Suspense>} />
+        <Route path="/depenses" element={<Suspense fallback={<Chargement />}><DepensesPage /></Suspense>} />
+        <Route path="/rh" element={<Suspense fallback={<Chargement />}><RHPage /></Suspense>} />
+        <Route path="/madrasa" element={<Suspense fallback={<Chargement />}><MadrasaPage /></Suspense>} />
+        <Route path="/bilans" element={<Suspense fallback={<Chargement />}><BilansPage /></Suspense>} />
+        <Route path="/stock" element={<Suspense fallback={<Chargement />}><StockPage /></Suspense>} />
+        <Route path="/social" element={<Suspense fallback={<Chargement />}><SocialPage /></Suspense>} />
         <Route
-          path="admin"
+          path="/admin"
           element={
             <RoutePrivee capacite={CAPACITES.ADMIN}>
               <Suspense fallback={<Chargement />}><AdminPage /></Suspense>
@@ -140,7 +147,7 @@ export default function App() {
           }
         />
       </Route>
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }

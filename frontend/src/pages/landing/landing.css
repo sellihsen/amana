@@ -1,0 +1,1226 @@
+/**
+ * Feuille de style de la page publique.
+ *
+ * Tout est préfixé par `.lp` : l'application connectée possède déjà ses propres
+ * `.card`, `.btn-primary`, `.label`… définies dans `src/index.css`. Sans ce
+ * cloisonnement, les deux jeux de règles se marcheraient dessus au premier
+ * changement de padding.
+ *
+ * Direction : le registre. Papier réglé vert-gris, encre ferro-gallique,
+ * filet carmin de la colonne des sorties, chiffres tabulaires.
+ */
+
+.lp {
+  /* — Couleurs ——————————————————————————————————————————————— */
+  --encre: #0e2119;
+  --encre-clair: #1b3a2c;
+  --registre: #e9eee7;
+  --papier: #f4f7f2;
+  --vergeure: #cfd9cb;
+  --amana: #22714e;
+  --amana-fonce: #184834;
+  --menthe: #6fc79b;
+  --carmin: #a8321e;
+  --graphite: #4c5b51;
+  --graphite-clair: #6f7f74;
+
+  /* — Rythme ————————————————————————————————————————————————— */
+  --gouttiere: 1.5rem;
+  --largeur: 1180px;
+  --filet: 1px solid var(--vergeure);
+
+  background: var(--registre);
+  color: var(--encre);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.lp *,
+.lp *::before,
+.lp *::after {
+  box-sizing: border-box;
+}
+
+/*
+ * `:where()` neutralise la spécificité : sans lui, `.lp p { margin: 0 }`
+ * (deux classes) l'emporterait sur `.lp-hero__mention { margin-top: … }`
+ * (une seule), et toutes les marges hautes de la page seraient annulées.
+ */
+.lp :where(h1, h2, h3, h4, p, ul, ol, dl, figure, blockquote) {
+  margin: 0;
+}
+
+.lp :where(ul) {
+  padding: 0;
+  list-style: none;
+}
+
+.lp a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.lp :focus-visible {
+  outline: 2px solid var(--amana);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.lp-ink :focus-visible {
+  outline-color: var(--menthe);
+}
+
+/* ─── Conteneur ─────────────────────────────────────────────────── */
+
+.lp-wrap {
+  width: 100%;
+  max-width: var(--largeur);
+  margin-inline: auto;
+  padding-inline: var(--gouttiere);
+}
+
+/* ─── Typographie ───────────────────────────────────────────────── */
+
+.lp-display {
+  font-family: 'Amiri', Georgia, serif;
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.lp-h1 {
+  font-size: clamp(2.5rem, 5.4vw, 4.15rem);
+}
+
+/* Titre de section, sous son bandeau de compte. */
+.lp-titre-section {
+  margin-top: 1.4rem;
+}
+
+.lp-h2 {
+  font-size: clamp(2rem, 3.8vw, 3.1rem);
+  line-height: 1.12;
+}
+
+.lp-h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+}
+
+/* `inline-block` : sans quoi la direction RTL colle le mot au bord droit. */
+.lp-arabe {
+  display: inline-block;
+  font-family: 'Amiri', serif;
+  font-size: 1.75rem;
+  line-height: 1;
+  direction: rtl;
+}
+
+.lp-lead {
+  font-size: clamp(1.06rem, 1.5vw, 1.28rem);
+  line-height: 1.55;
+  color: var(--graphite);
+  max-width: 38ch;
+}
+
+.lp-ink .lp-lead {
+  color: #b6c8bc;
+}
+
+.lp-mono {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * En chasse fixe, l'espace avant le symbole € tient la même largeur qu'un
+ * chiffre : passé 1,5 rem, « 39 € » se lit comme deux mots. On la resserre
+ * sur les grands nombres seulement, les colonnes du registre gardent la leur.
+ */
+.lp-chiffre {
+  word-spacing: -0.3em;
+}
+
+/* Bandeau de section : code du plan comptable + intitulé. */
+.lp-eyebrow {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--graphite-clair);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.lp-eyebrow::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--vergeure);
+}
+
+.lp-ink .lp-eyebrow {
+  color: var(--menthe);
+}
+
+.lp-ink .lp-eyebrow::after {
+  background: rgba(111, 199, 155, 0.28);
+}
+
+.lp-eyebrow--code {
+  color: var(--carmin);
+}
+
+/* ─── Boutons ───────────────────────────────────────────────────── */
+
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1;
+  padding: 0.95rem 1.5rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease,
+    border-color 0.18s ease, transform 0.18s ease;
+}
+
+.lp-btn--plein {
+  background: var(--menthe);
+  color: var(--encre);
+}
+
+.lp-btn--plein:hover {
+  background: #8ad9b3;
+}
+
+.lp-btn--vert {
+  background: var(--amana);
+  color: #fff;
+}
+
+.lp-btn--vert:hover {
+  background: var(--amana-fonce);
+}
+
+.lp-btn--fantome {
+  border-color: rgba(207, 217, 203, 0.35);
+  color: var(--registre);
+}
+
+.lp-btn--fantome:hover {
+  border-color: var(--menthe);
+  color: var(--menthe);
+}
+
+.lp-btn--contour {
+  border-color: var(--encre);
+  color: var(--encre);
+}
+
+.lp-btn--contour:hover {
+  background: var(--encre);
+  color: var(--registre);
+}
+
+.lp-btn--bloc {
+  width: 100%;
+}
+
+.lp-btn:active {
+  transform: translateY(1px);
+}
+
+/* ─── Bandes ────────────────────────────────────────────────────── */
+
+.lp-ink {
+  background: var(--encre);
+  color: var(--registre);
+}
+
+.lp-section {
+  padding-block: clamp(3.5rem, 6.5vw, 5.5rem);
+}
+
+.lp-section--serre {
+  padding-block: clamp(2.5rem, 4.5vw, 3.5rem);
+}
+
+/* ─── Navigation ────────────────────────────────────────────────── */
+
+.lp-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--encre);
+  border-bottom: 1px solid rgba(207, 217, 203, 0.14);
+}
+
+.lp-nav__inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 72px;
+}
+
+.lp-marque {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-right: auto;
+}
+
+.lp-marque__nom {
+  font-family: 'Amiri', serif;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--registre);
+}
+
+.lp-marque__ar {
+  font-family: 'Amiri', serif;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--menthe);
+  direction: rtl;
+}
+
+.lp-nav__liens {
+  display: flex;
+  align-items: center;
+  gap: 1.9rem;
+  font-size: 0.92rem;
+  color: #b6c8bc;
+}
+
+.lp-nav__liens a:hover {
+  color: var(--menthe);
+}
+
+.lp-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.lp-nav__connexion {
+  font-size: 0.92rem;
+  color: var(--registre);
+  white-space: nowrap;
+}
+
+.lp-nav__connexion:hover {
+  color: var(--menthe);
+}
+
+.lp-nav .lp-btn {
+  padding: 0.7rem 1.15rem;
+  font-size: 0.9rem;
+}
+
+/* ─── Héros ─────────────────────────────────────────────────────── */
+
+.lp-hero {
+  padding-top: clamp(3.5rem, 7vw, 5.5rem);
+  padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
+}
+
+.lp-hero__haut {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: end;
+}
+
+.lp-hero__ar {
+  color: var(--menthe);
+  margin-bottom: 1.1rem;
+}
+
+.lp-hero h1 {
+  color: var(--papier);
+  margin-bottom: 1.6rem;
+}
+
+.lp-hero h1 em {
+  font-style: italic;
+  color: var(--menthe);
+}
+
+.lp-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+.lp-hero__mention {
+  margin-top: 1.6rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  color: #7f9488;
+}
+
+.lp-hero figure {
+  padding-left: 1.6rem;
+  border-left: 1px solid rgba(207, 217, 203, 0.22);
+}
+
+/* ─── Le registre (élément signature) ───────────────────────────── */
+
+.lp-registre {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  border: 1px solid rgba(207, 217, 203, 0.22);
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.028) 0 1px,
+    transparent 1px 44px
+  );
+  background-position: 0 0;
+}
+
+.lp-registre__entete {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid rgba(207, 217, 203, 0.22);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8fa799;
+}
+
+.lp-registre__corps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Le filet carmin borde la colonne des sorties, comme sur le papier réglé. */
+.lp-colonne + .lp-colonne {
+  border-left: 1px solid rgba(168, 50, 30, 0.6);
+}
+
+.lp-colonne__titre {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.9rem 1.25rem 0.6rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--menthe);
+}
+
+.lp-colonne--sorties .lp-colonne__titre {
+  color: #d9836f;
+}
+
+.lp-ligne {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.52rem 1.25rem;
+  font-size: 0.92rem;
+  color: #cbd8cf;
+}
+
+.lp-ligne__code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.74rem;
+  color: #6f8478;
+  min-width: 2.9rem;
+}
+
+.lp-ligne__libelle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lp-ligne__montant {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+  color: var(--papier);
+  white-space: nowrap;
+}
+
+.lp-ligne--total {
+  margin-top: 0.35rem;
+  border-top: 1px solid rgba(207, 217, 203, 0.22);
+  padding-top: 0.7rem;
+  padding-bottom: 0.9rem;
+  font-weight: 500;
+  color: var(--papier);
+}
+
+.lp-ligne--total .lp-ligne__code {
+  color: transparent;
+}
+
+/* Pied inversé : l'écart. Le seul moment de bascule chromatique de la page. */
+.lp-registre__pied {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 1.05rem 1.25rem;
+  background: var(--menthe);
+  color: var(--encre);
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.lp-registre__pied dt {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.lp-registre__pied dd {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.lp-ecart {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  word-spacing: -0.3em;
+}
+
+.lp-ecart small {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* ─── Bandeau de faits ──────────────────────────────────────────── */
+
+.lp-faits {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: var(--filet);
+  border-bottom: var(--filet);
+}
+
+.lp-fait {
+  padding: 1.9rem 1.5rem;
+}
+
+.lp-fait + .lp-fait {
+  border-left: var(--filet);
+}
+
+.lp-fait__valeur {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.7rem;
+  line-height: 1.1;
+  color: var(--amana);
+  word-spacing: -0.2em;
+}
+
+.lp-fait__libelle {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--graphite);
+}
+
+/* ─── Fonctionnalités ───────────────────────────────────────────── */
+
+.lp-vedette {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+}
+
+.lp-vedette h2 {
+  margin-top: 1.4rem;
+  margin-bottom: 1.3rem;
+}
+
+.lp-liste {
+  margin-top: 1.9rem;
+  border-top: var(--filet);
+}
+
+.lp-liste li {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.85rem 0;
+  border-bottom: var(--filet);
+  font-size: 0.97rem;
+  color: var(--graphite);
+}
+
+.lp-liste svg {
+  flex: none;
+  margin-top: 0.18rem;
+  color: var(--amana);
+}
+
+/* Le reçu fiscal : second artefact, volontairement silencieux. */
+.lp-recu {
+  background: var(--papier);
+  border: var(--filet);
+  padding: 1.6rem 1.7rem 1.8rem;
+  box-shadow: 0 1px 0 var(--vergeure), 0 18px 40px -28px rgba(14, 33, 25, 0.55);
+}
+
+.lp-recu__entete {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--encre);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--graphite-clair);
+}
+
+.lp-recu__champ {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.62rem 0;
+  border-bottom: 1px dotted var(--vergeure);
+  font-size: 0.88rem;
+}
+
+.lp-recu__champ dt {
+  color: var(--graphite-clair);
+}
+
+.lp-recu__champ dd {
+  margin: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  color: var(--encre);
+  text-align: right;
+}
+
+.lp-recu__somme {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-top: 1.1rem;
+  padding-top: 0.9rem;
+  border-top: 2px solid var(--encre);
+}
+
+.lp-recu__somme span:first-child {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--graphite-clair);
+}
+
+.lp-recu__somme span:last-child {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.45rem;
+  word-spacing: -0.3em;
+  color: var(--amana);
+}
+
+.lp-recu__note {
+  margin-top: 1rem;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: var(--graphite-clair);
+}
+
+/* Trois comptes secondaires. */
+.lp-comptes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: var(--filet);
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+}
+
+.lp-compte {
+  padding: 2.2rem 1.9rem 2.4rem;
+  border-bottom: var(--filet);
+  transition: background-color 0.2s ease;
+}
+
+.lp-compte + .lp-compte {
+  border-left: var(--filet);
+}
+
+.lp-compte:hover {
+  background: var(--papier);
+}
+
+.lp-compte__code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--carmin);
+}
+
+.lp-compte h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.lp-compte p {
+  font-size: 0.94rem;
+  color: var(--graphite);
+}
+
+.lp-compte__detail {
+  margin-top: 1.3rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.74rem;
+  line-height: 1.9;
+  color: var(--graphite-clair);
+}
+
+/* ─── Tarifs ────────────────────────────────────────────────────── */
+
+.lp-tarifs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 3rem;
+  border: var(--filet);
+  background: var(--papier);
+}
+
+.lp-plan {
+  display: flex;
+  flex-direction: column;
+  padding: 2.2rem 1.9rem 2.4rem;
+}
+
+.lp-plan + .lp-plan {
+  border-left: var(--filet);
+}
+
+.lp-plan--retenu {
+  background: var(--encre);
+  color: var(--registre);
+  border-left-color: var(--encre);
+  margin-block: -1px;
+  padding-block: calc(2.2rem + 1px) calc(2.4rem + 1px);
+}
+
+.lp-plan--retenu + .lp-plan {
+  border-left-color: var(--encre);
+}
+
+.lp-plan__rang {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--graphite-clair);
+}
+
+.lp-plan--retenu .lp-plan__rang {
+  color: var(--menthe);
+}
+
+.lp-plan h3 {
+  font-family: 'Amiri', serif;
+  font-weight: 400;
+  font-size: 1.85rem;
+  letter-spacing: -0.01em;
+  margin-top: 0.85rem;
+}
+
+.lp-plan__pour {
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+  color: var(--graphite);
+}
+
+.lp-plan--retenu .lp-plan__pour {
+  color: #a8bcaf;
+}
+
+.lp-plan__prix {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin-top: 1.6rem;
+  padding-top: 1.4rem;
+  border-top: var(--filet);
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.lp-plan--retenu .lp-plan__prix {
+  border-top-color: rgba(207, 217, 203, 0.25);
+}
+
+.lp-plan__montant {
+  font-size: 2.5rem;
+  line-height: 1;
+  word-spacing: -0.3em;
+}
+
+/* Un prix sur devis n'est pas un chiffre : il ne mérite pas la même échelle. */
+.lp-plan__montant--mot {
+  font-size: 1.5rem;
+}
+
+.lp-plan__cadence {
+  font-size: 0.78rem;
+  color: var(--graphite-clair);
+}
+
+.lp-plan--retenu .lp-plan__cadence {
+  color: #a8bcaf;
+}
+
+.lp-plan__inclus {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  display: grid;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  color: var(--graphite);
+}
+
+.lp-plan--retenu .lp-plan__inclus {
+  color: #c2d2c8;
+}
+
+.lp-plan__inclus li {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+
+.lp-plan__inclus svg {
+  flex: none;
+  margin-top: 0.2rem;
+  color: var(--amana);
+}
+
+.lp-plan--retenu .lp-plan__inclus svg {
+  color: var(--menthe);
+}
+
+.lp-plan__pied {
+  margin-top: auto;
+}
+
+.lp-plan__note {
+  margin-top: 0.85rem;
+  font-size: 0.76rem;
+  color: var(--graphite-clair);
+  text-align: center;
+}
+
+.lp-plan--retenu .lp-plan__note {
+  color: #8fa799;
+}
+
+.lp-tarifs__apres {
+  margin-top: 1.5rem;
+  font-size: 0.88rem;
+  color: var(--graphite);
+}
+
+/* ─── Questions ─────────────────────────────────────────────────── */
+
+/* Intitulé à gauche, questions à droite : la mesure de lecture reste tenue. */
+.lp-faq-bloc {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.lp-faq-bloc__titre {
+  position: sticky;
+  top: 104px;
+}
+
+.lp-faq {
+  border-top: var(--filet);
+}
+
+.lp-question {
+  border-bottom: var(--filet);
+}
+
+.lp-question summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.35rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: 1.04rem;
+  font-weight: 500;
+}
+
+.lp-question summary::-webkit-details-marker {
+  display: none;
+}
+
+.lp-question summary:hover {
+  color: var(--amana);
+}
+
+.lp-question__signe {
+  flex: none;
+  margin-left: auto;
+  transition: transform 0.22s ease;
+  color: var(--graphite-clair);
+}
+
+.lp-question[open] .lp-question__signe {
+  transform: rotate(45deg);
+}
+
+.lp-question__reponse {
+  padding: 0 0 1.5rem 0;
+  max-width: 62ch;
+  font-size: 0.97rem;
+  color: var(--graphite);
+}
+
+/* ─── Lettre (formulaire) ───────────────────────────────────────── */
+
+/* Les deux bandeaux se posent sur la même ligne : l'alignement est le sujet. */
+.lp-lettre {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.lp-lettre h2 {
+  margin-top: 1.4rem;
+  margin-bottom: 1.2rem;
+  color: var(--papier);
+}
+
+.lp-form {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 2.1rem;
+}
+
+.lp-form__champ {
+  flex: 1 1 15rem;
+  min-width: 0;
+}
+
+.lp-form label {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--menthe);
+  margin-bottom: 0.55rem;
+}
+
+.lp-form input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: transparent;
+  border: 1px solid rgba(207, 217, 203, 0.32);
+  border-radius: 2px;
+  color: var(--papier);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.95rem;
+}
+
+.lp-form input::placeholder {
+  color: #6f8478;
+}
+
+.lp-form input:focus {
+  border-color: var(--menthe);
+  outline: none;
+}
+
+.lp-form__pied {
+  display: flex;
+  align-items: flex-end;
+}
+
+.lp-form__pied .lp-btn {
+  padding-block: 0.92rem;
+}
+
+.lp-form__mention {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  color: #7f9488;
+}
+
+.lp-form__confirme {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 2.1rem;
+  padding: 1.05rem 1.2rem;
+  border: 1px solid var(--menthe);
+  border-radius: 2px;
+  color: var(--menthe);
+  font-size: 0.95rem;
+}
+
+.lp-sommaire {
+  border-top: 1px solid rgba(207, 217, 203, 0.2);
+}
+
+.lp-sommaire li {
+  display: flex;
+  gap: 1.1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(207, 217, 203, 0.2);
+  font-size: 0.94rem;
+  color: #b6c8bc;
+}
+
+.lp-sommaire__no {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.74rem;
+  color: var(--menthe);
+  white-space: nowrap;
+}
+
+/* ─── Pied de page ──────────────────────────────────────────────── */
+
+.lp-pied {
+  border-top: var(--filet);
+  padding-block: 3rem 2.5rem;
+  background: var(--registre);
+}
+
+.lp-pied__haut {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: space-between;
+}
+
+.lp-pied .lp-marque__nom {
+  color: var(--encre);
+}
+
+.lp-pied .lp-marque__ar {
+  color: var(--amana);
+}
+
+.lp-pied__accroche {
+  margin-top: 0.7rem;
+  font-size: 0.9rem;
+  color: var(--graphite);
+  max-width: 30ch;
+}
+
+.lp-pied__cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.5rem;
+}
+
+.lp-pied__titre {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--graphite-clair);
+  margin-bottom: 1rem;
+}
+
+.lp-pied__cols li {
+  padding: 0.32rem 0;
+  font-size: 0.92rem;
+  color: var(--graphite);
+}
+
+.lp-pied__cols a:hover {
+  color: var(--amana);
+}
+
+.lp-pied__bas {
+  margin-top: 3rem;
+  padding-top: 1.4rem;
+  border-top: var(--filet);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--graphite-clair);
+}
+
+/* ─── Mouvement ─────────────────────────────────────────────────── */
+/*
+ * L'orchestration est réservée au registre : les lignes s'inscrivent une à
+ * une, puis l'écart tombe. Le reste de la page ne bouge pas.
+ */
+
+@keyframes lp-inscrire {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lp-sceller {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.lp-anim-ligne {
+  opacity: 0;
+  animation: lp-inscrire 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.lp-anim-pied {
+  animation: lp-sceller 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 1.35s backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp *,
+  .lp *::before,
+  .lp *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .lp-anim-ligne {
+    opacity: 1;
+  }
+}
+
+/* ─── Adaptation ────────────────────────────────────────────────── */
+
+@media (max-width: 1020px) {
+  .lp-nav__liens {
+    display: none;
+  }
+  .lp-hero__haut {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .lp-lead {
+    max-width: 52ch;
+  }
+  .lp-vedette,
+  .lp-lettre,
+  .lp-faq-bloc {
+    grid-template-columns: 1fr;
+  }
+  .lp-faq-bloc__titre {
+    position: static;
+  }
+  .lp-hero figure {
+    padding-left: 0;
+    border-left: 0;
+    padding-top: 1.6rem;
+    border-top: 1px solid rgba(207, 217, 203, 0.22);
+  }
+  .lp-comptes {
+    grid-template-columns: 1fr;
+  }
+  .lp-compte + .lp-compte {
+    border-left: 0;
+  }
+  .lp-tarifs {
+    grid-template-columns: 1fr;
+  }
+  .lp-plan + .lp-plan {
+    border-left: 0;
+    border-top: var(--filet);
+  }
+  .lp-plan--retenu {
+    margin-block: 0;
+    padding-block: 2.2rem 2.4rem;
+    border-top-color: var(--encre);
+  }
+  .lp-plan--retenu + .lp-plan {
+    border-left: 0;
+    border-top-color: var(--encre);
+  }
+}
+
+@media (max-width: 720px) {
+  .lp {
+    font-size: 16px;
+  }
+  .lp-nav__connexion {
+    display: none;
+  }
+  .lp-registre__corps {
+    grid-template-columns: 1fr;
+  }
+  .lp-colonne + .lp-colonne {
+    border-left: 0;
+    border-top: 1px solid rgba(168, 50, 30, 0.6);
+  }
+  .lp-faits {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lp-fait:nth-child(odd) {
+    border-left: 0;
+  }
+  .lp-fait:nth-child(n + 3) {
+    border-top: var(--filet);
+  }
+  .lp-ligne__libelle {
+    white-space: normal;
+  }
+  .lp-hero__actions .lp-btn {
+    flex: 1 1 100%;
+  }
+  .lp-pied__cols {
+    gap: 2rem;
+  }
+}
